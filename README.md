@@ -2,8 +2,13 @@
 2D miner/shooter and builder programmed in processing. 
 
 HOW TO INSTALL: 
-1. Download the zip of this github and extract to /processing-3.5.4
-2. Navigate to /processing-3.5.4/Alien-Mine-Blast-Dash-master/FortCraft-master
+PRE ALPHA VERSION AVAILABLE
+version 0.9.1 is available in the /releases/pre-alpha directory for 32 and 64 bit windows computers
+
+
+HOW TO INSTALL (IN DEVELOPMENT): 
+1. Download the zip of this github and extract
+2. Move the entire data folder in the sketch_190710a folder. 
 3. Find file sketch_190710a.pde, right click and open with processing
 4. If this does not work for you please email me at piledrivegames /(@)\ gmail.com (remove extra characters surrounding the @, this is to avoid bots picking up my email address)
 
