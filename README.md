@@ -1,10 +1,6 @@
 # Alien Mine: Blast & Dash
 2D miner/shooter and builder programmed in processing. 
 
-HOW TO INSTALL: 
-PRE ALPHA VERSION AVAILABLE
-version 0.9.1 is available in the /releases/pre-alpha directory for 32 and 64 bit windows computers
-
 
 HOW TO INSTALL (IN DEVELOPMENT): 
 1. Download the zip of this github and extract
