@@ -1,6 +1,7 @@
 # Alien Mine: Blast & Dash
 2D miner/shooter and builder programmed in processing. 
 
+Travel through 3 biomes encountering 10+ enemies that impose unique challenges. Upgrade your weapons, abilities and armor. Can you survive the onslaught?
 
 HOW TO INSTALL (IN DEVELOPMENT): 
 1. Download the zip of this github and extract
