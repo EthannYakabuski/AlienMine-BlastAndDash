@@ -1,5 +1,5 @@
 import processing.sound.*;
-
+import java.util.Arrays;
 
 Player playerone = new Player();
 GameBoard board = new GameBoard();
@@ -8,6 +8,9 @@ PImage[] images = new PImage[100];
 
 int width = 1400;
 int height = 900;
+
+
+int playersHighScore = 0;
 
 int frameRule; 
 
@@ -22,6 +25,11 @@ int superTimer = 0;
 //boolean shotGunSickness = false;
 int shotGunTimer = 0;
 
+boolean titleScreen = true;
+
+
+boolean showingScores = false;
+
 void setup() {
   
   
@@ -30,6 +38,9 @@ void setup() {
   frameRate(30);
   
   frameRule = -1;
+  
+ 
+  
   
   //tiles
   images[0] = loadImage("tree100.PNG");
@@ -190,7 +201,7 @@ void setup() {
   images[42].resize(40,40);
   
   
-  images[49] = loadImage("cannonBall.JPG");
+  images[49] = loadImage("cannonBall.png");
   images[49].resize(40,40);
   
   
@@ -208,8 +219,34 @@ void setup() {
 
 
 void draw() {
+  
+  
+  //main menu options for the game
+  
+  
+  if(showingScores) {
+    
+    //show the scores
+    String[] lines = loadStrings("highScores.txt");
+    
+    for(int i = 0; i < lines.length; i++) {
+      
+      fill(155); 
+      textSize(30);
+      text(lines[i], 100, 100*(i+1));
+      textSize(11);
+    }
+    
+  }
+  
+  
+  
   //basic layout
   background(255);
+  
+  
+  if(titleScreen) { noLoop(); }
+  
   gridDisplay();
   
   
@@ -321,6 +358,60 @@ void draw() {
     showRestartButton();
   }
   
+  
+  
+  if(titleScreen) { makeIntroScreen(); }
+  
+}
+
+void makeIntroScreen() {
+  //noLoop();
+  
+  color(255);
+  fill(000);
+  rect(0,0,2800,1800);
+  
+  
+  makePlayButton();
+  
+  makeLeaderBoardButton();
+  
+  showScores();
+  
+  makeCharacterCustomizationButton();
+  
+  
+  
+}
+
+void makePlayButton() {
+  
+  fill(255); 
+  
+  rect(700,300,250,100);
+  fill(000);
+  textSize(20);
+  text("PLAY : NORMAL MODE", 590, 300);
+  textSize(11);
+  
+}
+
+void makeCharacterCustomizationButton() {
+  
+  
+}
+
+
+void makeLeaderBoardButton() {
+  
+  fill(255);
+  
+  rect(700,450,250,100);
+  fill(000);
+  textSize(20);
+  text("LEADERBOARD", 620, 450);
+  textSize(11);
+  
 }
 
 void showRestartButton() {
@@ -332,7 +423,6 @@ void showRestartButton() {
   text("RESTART",80,100);
   
 }
-
 
 void gridDisplay() {
   
@@ -417,6 +507,39 @@ void keyPressed() {
   
 }
 
+void showScores() {
+  System.out.println("Showing scores");
+  
+  showingScores = true;
+  
+  
+  String[] lines = loadStrings("highScores.txt");
+  
+  for(int i = 0; i < lines.length; i++) {
+     System.out.println(lines[i]);
+  }
+  
+  //show the scores
+    //String[] lines = loadStrings("highScores.txt");
+    fill(155);
+    textSize(30);
+    text("Last 10 games score", 100,50);
+    
+    textSize(11);
+    
+    for(int i = 0; i < lines.length; i++) {
+      
+      fill(155); 
+      textSize(30);
+      text(lines[i], 100, 75+(75*(i+1)));
+      textSize(11);
+    }
+    
+ // loop();
+
+
+}
+
 void mouseDragged() {
   
  // println(mouseX);
@@ -433,9 +556,54 @@ void mouseDragged() {
       
       if( (mouseY >=0) & (mouseY <= 400) ) {
         
+        
+       //save the players score
+        String[] lines = loadStrings("highScores.txt");
+        
+        System.out.println("lines.length"+lines.length);
+        
+        String[] newData;
+        
+        
+        if(lines.length>=10) {
+          newData = new String[10];
+          newData[0] = String.valueOf(playerone.score);
+        } else {
+          newData = new String[lines.length+1];
+          newData[0] = String.valueOf(playerone.score);
+        }
+        
+        for(int i = 0; i < lines.length; i++) {
+          
+          newData[i+1] = lines[i];
+          
+        }
+       
+        
+       
+        
+        saveStrings("data/highScores.txt",newData);
+        
+        
+        
         restartAvailable = false;
         board.resetBoardVariables();
         board.pseudoConstructor();
+        
+        
+        restartAvailable = false;
+
+        potionSickness = false;
+        potionTimer = 0;
+
+        superSickness = false; 
+        superTimer = 0; 
+
+        //boolean shotGunSickness = false;
+        shotGunTimer = 0;
+
+        titleScreen = true;
+        
         setup();
         loop();
       }
@@ -443,6 +611,52 @@ void mouseDragged() {
     }
     
   }
+  
+  
+  
+  //if the game is on the title screen
+  if(titleScreen) {
+    
+    
+    if(  (mouseX >= 575) & (mouseX <= 825) ) {
+      
+      if(  (mouseY >= 250) & (mouseY <= 350) ) {
+        
+        //the player is clicking the story mode button
+        titleScreen = false;
+        loop();
+        
+        
+      }
+      
+      
+      
+    }
+    
+    
+    
+    if(  (mouseX >= 575) & (mouseX <= 825) ) {
+      
+      if(  (mouseY >= 400) & (mouseY <= 500) ) {
+        
+        //the player is clicking the story mode button
+        titleScreen = true;
+        showingScores = true;
+       // loop();
+        showScores();
+       // loop();
+        
+      }
+      
+      
+      
+    }
+    
+    
+    
+  }
+  
+  
   
   //proves the clicking is on the correct square
   /*
@@ -479,64 +693,12 @@ void mouseDragged() {
     board.tiles[y][x].clicked(playerone);
   }
 
-  //this section holds the code to handle the user clicks in the HUD area
-  if(mouseY > 800) {
-    System.out.println("The user has clicked the HUD area"); 
-    
-    
-    //handles armor upgrade choices
-    if(mouseY >= 810 && mouseY <= 830) {
-      System.out.println("Armor upgrade chosen"); 
-      
-      //handles which tier of armor upgrade was chosen
-      if(mouseX >= 1135 && mouseX <= 1185) {
-        System.out.println("Wood armor"); 
-        playerone.applyArmor(1); 
-      } else if (mouseX >= 1195 && mouseX <= 1245) {
-        System.out.println("Iron armor"); 
-        playerone.applyArmor(2); 
-      } else if (mouseX >= 1255 && mouseX <= 1305) {
-        System.out.println("Gold armor");  
-        playerone.applyArmor(3);
-      }
-      
-    //handles tommy gun upgrades  
-    } else if (mouseY >= 840 && mouseY <=860) {
-      System.out.println("Tommy Gun upgrade chosen"); 
-      
-      //handles which tier of tommy upgrade was chosen
-      if(mouseX >= 1135 && mouseX <= 1185) {
-        System.out.println("Wood Tommy"); 
-      } else if (mouseX >= 1195 && mouseX <= 1245) {
-        System.out.println("Iron Tommy"); 
-        board.giveWeapon("Iron Tommy"); 
-      } else if (mouseX >= 1255 && mouseX <= 1305) {
-        System.out.println("Gold Tommy");  
-        board.giveWeapon("Gold Tommy");
-      }
-      
-      
-    //handles shotgun upgrades
-    } else if (mouseY >= 870 && mouseY <= 890) {
-      System.out.println("Shotgun upgrade chosen"); 
-      
-      
-      //handles which tier of shotgun upgrade was chosen
-      if(mouseX >= 1135 && mouseX <= 1185) {
-        System.out.println("Wood Shotgun"); 
-      } else if (mouseX >= 1195 && mouseX <= 1245) {
-        System.out.println("Iron Shotgun");
-        board.giveWeapon("Iron Shotgun");
-      } else if (mouseX >= 1255 && mouseX <= 1305) {
-        System.out.println("Gold Shotgun");  
-        board.giveWeapon("Gold Shotgun");
-      }
-    }
-    
-  }
+ 
   
   
 }
+
+
 
 void mousePressed() {
   
@@ -554,14 +716,104 @@ void mousePressed() {
       
       if( (mouseY >=0) & (mouseY <= 400) ) {
         
+        
+        
+        //save the players score
+        String[] lines = loadStrings("highScores.txt");
+        
+        System.out.println("lines.length"+lines.length);
+        
+        String[] newData;
+        
+        
+        if(lines.length>=10) {
+          newData = new String[10];
+          newData[0] = String.valueOf(playerone.score);
+        } else {
+          newData = new String[lines.length+1];
+          newData[0] = String.valueOf(playerone.score);
+        }
+        
+        for(int i = 0; i < lines.length; i++) {
+          
+          newData[i+1] = lines[i];
+          
+        }
+       
+        
+       
+        
+        saveStrings("data/highScores.txt",newData);
+        
+        
+        
         restartAvailable = false;
         board.resetBoardVariables();
         board.pseudoConstructor();
+        
+        
+        restartAvailable = false;
+
+        potionSickness = false;
+        potionTimer = 0;
+
+        superSickness = false; 
+        superTimer = 0; 
+
+        //boolean shotGunSickness = false;
+        shotGunTimer = 0;
+
+        titleScreen = true;
+        
+        //GameBoard tempBoard = new GameBoard();
+       // board = tempBoard;
         setup();
         loop();
       }
       
     }
+    
+  }
+  
+  
+  
+  //if the game is on the title screen
+  if(titleScreen) {
+    
+    
+    if(  (mouseX >= 575) & (mouseX <= 825) ) {
+      
+      if(  (mouseY >= 250) & (mouseY <= 350) ) {
+        
+        //the player is clicking the story mode button
+        titleScreen = false;
+        loop();
+        
+        
+      }
+      
+      
+      
+    }
+    
+    if(  (mouseX >= 575) & (mouseX <= 825) ) {
+      
+      if(  (mouseY >= 400) & (mouseY <= 500) ) {
+        
+        //the player is clicking the story mode button
+        titleScreen = true;
+        showingScores = true;
+        //loop();
+        showScores();
+        //loop();
+        
+      }
+      
+      
+      
+    }
+    
+    
     
   }
   

@@ -12,7 +12,7 @@ class PirateShip extends Enemy {
   
   //for testing spawns a flower (0,0)
   PirateShip() {
-    super(200, 5, 0, 0, 0, 0, "PirateShip", 2000);
+    super(20000, 3, 0, 0, 0, 0, "PirateShip", 2000);
     
     images[0] = loadImage("pirateShip.png");
     images[0].resize(250,100);
@@ -22,7 +22,7 @@ class PirateShip extends Enemy {
   
   //for when the location is specified
   PirateShip(float x, float y) {
-    super(200, 3, x, y, x/20, y/20, "PirateShip", 2000);
+    super(20000, 3, x, y, x/20, y/20, "PirateShip", 2000);
     
     images[0] = loadImage("pirateShip.png");
     images[0].resize(250,100);

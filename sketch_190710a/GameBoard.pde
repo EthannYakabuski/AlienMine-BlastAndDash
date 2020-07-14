@@ -187,12 +187,14 @@ class GameBoard {
       //tropical enemies
          //enemies.add(new Monkey(300,320));
        // enemies.add(new Gorilla(300,320));
-         enemies.add(new PirateShip(0,0));
+         //enemies.add(new PirateShip(0,0));
        
        
-       
+       //steel
        //generateBiome();
-       generateTropical();
+       
+       //tropical
+       //generateTropical();
        
    
     }
@@ -642,7 +644,7 @@ class GameBoard {
   
   void introducePirateShip() {
     
-    
+    enemies.add(new PirateShip(0,0));
     
     
   }
@@ -1010,6 +1012,79 @@ class GameBoard {
   
   //resets all of the board game variables for game restart
   void resetBoardVariables() {
+    
+    
+    plantedTrees = false;
+    plantedTreesInSteel = false; 
+    plantedTreesInTropical = false;
+
+    collision = false;
+    
+    
+    bulletSize = 10; 
+    score = 0; 
+  
+    currentBiome = "grassland"; 
+  
+    phalaxDeath = false; 
+    hiveMasterDeath = false; 
+  
+    shotGunSickness = false;
+    shotGunAnimationTick = 0;
+  
+    tommyGunSickness = false; 
+    tommyGunAnimationTick = 0; 
+  
+    pirateSicknessCounter = 0;
+    pirateSickness = false;
+  
+    waterLoc = -1;
+    
+    difficulty = 0; 
+  difficultyStepper = 6; 
+  difficultyStepperFlower = 6;
+  difficultyStepperRobot = 6;
+  difficultyStepperEQuad = 6;
+  difficultyStepperMonkey = 2; 
+  difficultyStepperGorilla = 4;
+    
+    
+   initialEnemies = false; 
+  
+  spawningFlowers = false;
+  spawningRobots = false;
+  spawningElectroQuads = false;
+  spawningMonkeys = false; 
+  spawningGorillas = false;
+  
+  Random r;
+  
+  spawner = 0; 
+  
+  flowerSpawner = 0;
+  
+  robotSpawner = 0; 
+  
+  electroQuadSpawner = 0; 
+  
+  monkeySpawner = 0; 
+
+  gorillaSpawner = 0; 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
     players[0].reset();
     
     plantedTrees = false; 
@@ -1050,6 +1125,16 @@ class GameBoard {
       robotBullets.remove(i); 
     }
     robotBullets.clear();
+    
+    for (int i = 0; i < hiveBullets.size(); i++) {
+      hiveBullets.remove(i); 
+    }
+    hiveBullets.clear();
+    
+    for (int i = 0; i < cannonBullets.size(); i++) {
+      cannonBullets.remove(i); 
+    }
+    cannonBullets.clear();
     
     initialEnemies = false;
     spawner = 0; 
@@ -1136,13 +1221,22 @@ class GameBoard {
     armorAvailable[2] = new Armor("Gold", "Gold Armor", false, 100, 200, #E6ED35); 
     
     //so far there are three types of each weapon and there are only two types of weapons as per design
-    weaponAvailable[0] = new Weapon("Wood", "Wood Tommy", 6, 6, false, 100, 9, 150, 50, #836835, "Tommy"); 
-    weaponAvailable[1] = new Weapon("Iron", "Iron Tommy", 8, 8, false, 100, 9, 150, 50, #B2A89C, "Tommy");
-    weaponAvailable[2] = new Weapon("Gold", "Gold Tommy", 12, 12, false, 150, 10, 150, 50, #E6ED35, "Tommy");
+   //there are three tiers of each weapon, there are only two types of weapons as per design
+    weaponAvailable[0] = new Weapon("Wood", "Wood Tommy", 5, 5, false, 100, 9, 40, 40, #836835, "Tommy");
+    weaponAvailable[0].ammo = 40;
+    weaponAvailable[1] = new Weapon("Iron", "Iron Tommy", 7, 7, false, 100, 9, 50, 50, #B2A89C, "Tommy");
+    weaponAvailable[1].ammo = 50;
+    weaponAvailable[2] = new Weapon("Gold", "Gold Tommy", 10, 10, false, 100, 10, 60, 60, #E6ED35, "Tommy");
+    weaponAvailable[2].ammo = 60;
     
-    weaponAvailable[3] = new Weapon("Wood", "Wood Shotgun", 75, 150, false, 100, 3, 10, 2, #836835, "Shotgun");
-    weaponAvailable[4] = new Weapon("Iron", "Iron Shotgun", 100, 175, false, 100, 3, 10, 2, #B2A89C, "Shotgun");
-    weaponAvailable[5] = new Weapon("Gold", "Gold Shotgun", 125, 200, false, 100, 3, 12, 2, #E6ED35, "Shotgun");
+    weaponAvailable[3] = new Weapon("Wood", "Wood Shotgun", 200, 25, false, 100, 3, 10, 2, #836835, "Shotgun");
+    weaponAvailable[3].ammo = 20;
+    weaponAvailable[4] = new Weapon("Iron", "Iron Shotgun", 300, 50, false, 100, 3, 10, 2, #B2A89C, "Shotgun");
+    weaponAvailable[4].ammo = 20;
+    weaponAvailable[5] = new Weapon("Gold", "Gold Shotgun", 500, 75, false, 100, 3, 12, 2, #E6ED35, "Shotgun");
+    weaponAvailable[5].ammo = 20;
+    weaponAvailable[6] = new Weapon("Gold", "Super Power", 100, 100, false, 100, 9, 1000, 1000, #836835, "Superpower");
+    weaponAvailable[6].ammo = 100000;
     
     //difficulty tracker
     difficulty = 0; 
@@ -1151,6 +1245,132 @@ class GameBoard {
   
   
   void checkCannonBulletCollisions() {
+    
+    //for each flower bullet that is in action
+    for(int i = 0; i < cannonBullets.size(); i++) {
+      
+      int bulletX = cannonBullets.get(i).getXC();
+      int bulletY = cannonBullets.get(i).getYC(); 
+      
+      //switched them by accident somewhere along the line
+      int playerXC = players[0].getYC()*20;
+      int playerYC = players[0].getXC()*20;
+      
+      
+      //translate the bulletX and bulletY to the index
+      //System.out.println("FlowerBulletX: " + bulletX); 
+      //System.out.println("FlowerBulletY: " + bulletY); 
+      
+      int timesLoopedX = 0; 
+      int bulletXLooping = bulletX; 
+      
+      int timesLoopedY = 0; 
+      int bulletYLooping = bulletY; 
+      
+      while(bulletXLooping > 0) {
+        bulletXLooping = bulletXLooping - 20;
+        timesLoopedX = timesLoopedX + 1;
+      }
+      
+      while(bulletYLooping > 0) {
+        bulletYLooping = bulletYLooping - 20; 
+        timesLoopedY = timesLoopedY + 1;
+      }
+      
+      
+      
+      if( (timesLoopedX*20 == playerXC) & (timesLoopedY*20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20 == playerXC+20) & (timesLoopedY*20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20 == playerXC+20) & (timesLoopedY*20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+       if( (timesLoopedX*20 == playerXC) & (timesLoopedY*20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      
+      
+      
+      
+      if( (timesLoopedX*20+20 == playerXC) & (timesLoopedY*20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20+20 == playerXC+20) & (timesLoopedY*20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20+20 == playerXC+20) & (timesLoopedY*20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+       if( (timesLoopedX*20+20 == playerXC) & (timesLoopedY*20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      
+      
+       if( (timesLoopedX*20+20 == playerXC) & (timesLoopedY*20+20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20+20 == playerXC+20) & (timesLoopedY*20+20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20+20 == playerXC+20) & (timesLoopedY*20+20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+       if( (timesLoopedX*20+20 == playerXC) & (timesLoopedY*20+20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      
+      
+      if( (timesLoopedX*20 == playerXC) & (timesLoopedY*20+20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20 == playerXC+20) & (timesLoopedY*20+20 == playerYC)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      if( (timesLoopedX*20 == playerXC+20) & (timesLoopedY*20+20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+       if( (timesLoopedX*20 == playerXC) & (timesLoopedY*20+20 == playerYC+20)) {
+        //System.out.println("There has been damage dealt from a robot bullet to the player"); 
+        if(cannonBullets.get(i).getStatus()) { players[0].takeDamage(cannonBullets.get(i).getDamage()); }
+      }
+      
+      
+      
+    }
+    
     
     
   }
@@ -1674,6 +1894,157 @@ class GameBoard {
             
             }
               
+            } else if (enemies.get(e).getEnemyType().equals("PirateShip")) {
+              
+              int collisions = 0;
+              boolean pirateCollision = false;
+              
+              //the pirate ship image is eleven blocks wide and 5 blocks tall, but not all of those boxes should be hitboxes
+              //the pirate ship hit box image looks like the following: 
+              
+              /*
+              
+              o o o o o x x x o o o 
+              o o x x x x x x x o o 
+              x x x x x x x x x x x 
+              o x x x x x x x x x o 
+              o o x x x x x x x x o 
+              
+              
+              */
+              
+              
+              
+              
+              
+              //first row
+              
+            if(   ((enemyX+100-bulletSize/2) < bulletX) & (bulletX < (enemyX+120+bulletSize/2)) & ( ((enemyY-bulletSize/2) < bulletY) & (bulletY < (enemyY+20+bulletSize/2)) ) ) { pirateCollision = true; collisions++; }
+            
+            if(   ((enemyX+120-bulletSize/2) < bulletX) & (bulletX < (enemyX+140+bulletSize/2)) & ( ((enemyY-bulletSize/2) < bulletY) & (bulletY < (enemyY+20+bulletSize/2)) ) ) { pirateCollision = true; collisions++; }
+              
+            if(   ((enemyX+140-bulletSize/2) < bulletX) & (bulletX < (enemyX+160+bulletSize/2)) & ( ((enemyY-bulletSize/2) < bulletY) & (bulletY < (enemyY+20+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            
+            //second row
+            
+            if(   ((enemyX+40-bulletSize/2) < bulletX) & (bulletX < (enemyX+60+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            if(   ((enemyX+60-bulletSize/2) < bulletX) & (bulletX < (enemyX+80+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            if(   ((enemyX+80-bulletSize/2) < bulletX) & (bulletX < (enemyX+100+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            if(   ((enemyX+100-bulletSize/2) < bulletX) & (bulletX < (enemyX+120+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            if(   ((enemyX+120-bulletSize/2) < bulletX) & (bulletX < (enemyX+140+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            if(   ((enemyX+140-bulletSize/2) < bulletX) & (bulletX < (enemyX+160+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            if(   ((enemyX+160-bulletSize/2) < bulletX) & (bulletX < (enemyX+180+bulletSize/2)) & ( ((enemyY+20-bulletSize/2) < bulletY) & (bulletY < (enemyY+40+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+            
+            
+            
+            //third row
+            
+             if(   ((enemyX+bulletSize/2) < bulletX) & (bulletX < (enemyX+20+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+20+bulletSize/2) < bulletX) & (bulletX < (enemyX+40+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+40+bulletSize/2) < bulletX) & (bulletX < (enemyX+60+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+60+bulletSize/2) < bulletX) & (bulletX < (enemyX+80+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+              if(   ((enemyX+80+bulletSize/2) < bulletX) & (bulletX < (enemyX+100+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+100+bulletSize/2) < bulletX) & (bulletX < (enemyX+120+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+120+bulletSize/2) < bulletX) & (bulletX < (enemyX+140+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+140+bulletSize/2) < bulletX) & (bulletX < (enemyX+160+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+              if(   ((enemyX+160+bulletSize/2) < bulletX) & (bulletX < (enemyX+180+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+180+bulletSize/2) < bulletX) & (bulletX < (enemyX+200+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+200+bulletSize/2) < bulletX) & (bulletX < (enemyX+220+bulletSize/2)) & ( ((enemyY+40-bulletSize/2) < bulletY) & (bulletY < (enemyY+60+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+            
+            //fourth row
+            
+            if(   ((enemyX+20+bulletSize/2) < bulletX) & (bulletX < (enemyX+40+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+40+bulletSize/2) < bulletX) & (bulletX < (enemyX+60+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+60+bulletSize/2) < bulletX) & (bulletX < (enemyX+80+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+              if(   ((enemyX+80+bulletSize/2) < bulletX) & (bulletX < (enemyX+100+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+100+bulletSize/2) < bulletX) & (bulletX < (enemyX+120+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+120+bulletSize/2) < bulletX) & (bulletX < (enemyX+140+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++; }
+             
+             if(   ((enemyX+140+bulletSize/2) < bulletX) & (bulletX < (enemyX+160+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+              if(   ((enemyX+160+bulletSize/2) < bulletX) & (bulletX < (enemyX+180+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+180+bulletSize/2) < bulletX) & (bulletX < (enemyX+200+bulletSize/2)) & ( ((enemyY+60-bulletSize/2) < bulletY) & (bulletY < (enemyY+80+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             
+             //fifth row
+             
+             if(   ((enemyX+40+bulletSize/2) < bulletX) & (bulletX < (enemyX+60+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++; }
+             
+             if(   ((enemyX+60+bulletSize/2) < bulletX) & (bulletX < (enemyX+80+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+              if(   ((enemyX+80+bulletSize/2) < bulletX) & (bulletX < (enemyX+100+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+100+bulletSize/2) < bulletX) & (bulletX < (enemyX+120+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+120+bulletSize/2) < bulletX) & (bulletX < (enemyX+140+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+140+bulletSize/2) < bulletX) & (bulletX < (enemyX+160+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+              if(   ((enemyX+160+bulletSize/2) < bulletX) & (bulletX < (enemyX+180+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             if(   ((enemyX+180+bulletSize/2) < bulletX) & (bulletX < (enemyX+200+bulletSize/2)) & ( ((enemyY+80-bulletSize/2) < bulletY) & (bulletY < (enemyY+100+bulletSize/2)) ) ) { pirateCollision = true; collisions++;}
+             
+             
+              if(pirateCollision) {
+              
+               System.out.println("Pirate COLLISION");
+               System.out.println("collisions: " + collisions);
+              
+               boolean death = false;
+            
+               death = enemies.get(e).receiveDamage(playerBullets.get(i).getDamage()*collisions);
+               
+               collisions = 0;
+            
+              //if an enemy death has occured, remove it from the game
+              if(death) {
+                System.out.println("There has been a MURDER");
+              
+                //get the appropriate score to add
+                int addedScore = enemies.get(e).getScore();
+                score = score + addedScore; 
+          
+                //set the players score
+                players[0].setScore(score);
+              
+                //remove the enemy from the game
+                enemies.remove(enemies.get(e));
+                
+                
+                
+                System.out.println("You have won the game");
+              
+              
+              }
+          
+            
+            }
+              
+              
             } else if (enemies.get(e).getEnemyType() == "ElectroQuad" || enemies.get(e).getEnemyType() == "ElectroDuo" || enemies.get(e).getEnemyType() == "Gorilla") {
            
            boolean electroQuadCollision = false;
@@ -2002,7 +2373,7 @@ class GameBoard {
         
     }
     
-    cannonBullets.add(tempCannonBullet = new CannonBullet(xSpeed*4, ySpeed*4, 10, robotX, robotY, (int)damage/2)); 
+    cannonBullets.add(tempCannonBullet = new CannonBullet(xSpeed*4, ySpeed*4, 10, robotX, robotY, (int)damage)); 
     
    
   }

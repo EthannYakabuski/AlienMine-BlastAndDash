@@ -136,9 +136,9 @@ class Player {
   
     score = 0; 
   
-    goldAmount =0; 
-    ironAmount =0; 
-    woodAmount =100;
+    goldAmount =1000; 
+    ironAmount =1000; 
+    woodAmount =200;
     active = 0;
   
     health = 200;
