@@ -2,6 +2,11 @@
 2D miner/shooter and builder programmed in processing. 
 
 Travel through 3 biomes encountering 10+ enemies that impose unique challenges. Upgrade your weapons, abilities and armor. Can you survive the onslaught?
+HOW TO INSTALL STANDALONE GAME (Pre-ALPHA VERSION V0.091): 
+1. Download AlienMineV0.091.zip
+2. Extract
+3. Install latest version of java 8
+4. Run sketch190710a.exe
 
 HOW TO INSTALL (IN DEVELOPMENT): 
 1. Download the zip of this github and extract
@@ -68,13 +73,13 @@ ELECTRO DUO: Similar AI but physicaly larger than flowers, and shoot larger more
 
 ELECTRO MAN: Similar AI and size to ANTS. They do twice the damage though!
 
-ELECTRO KING: Steel biome BOSS. Moves and shoots like nothing else you have seen. Spawns a disgusting amount of minions as you drain its health. Plead for the sweet release of game over. 
+ELECTRO KING: Steel biome BOSS. Moves and shoots like nothing else you have seen. You will plead for the sweet release of game over as your sweat drips onto your mouse. 
 
 
 TROPICAL BIOME:
 
-MONKEY: Fastest moving unit in the game. Moves erratically and will deal some serious damage each frame they are ontop of you. 
+MONKEY: Second fastest moving unit in the game. Moves erratically and will deal some serious damage each frame they are ontop of you. 
 
-GORILLA: The second fastest moving unit in the game. They have a larger hitbox, but will mercilissely hunt you down until they inflict massive damage with each frame. 
+GORILLA: The fastest moving unit in the game. They have a larger hitbox, but will mercilissely hunt you down until they inflict massive damage with each frame. 
 
-PIRATE SHIP: The TROPICAL Biome boss and the ALPHA version release FINAL BOSS, Moves and shoots like nothing else you have seen. Heavy Barrage of cannon balls while MONKEY's and GORILLA's charge you non-stop. 
+PIRATE SHIP: The TROPICAL Biome boss and the ALPHA version release FINAL BOSS, Moves and shoots like nothing else you have seen. Heavy Barrage of cannon balls while MONKEY's charge you non-stop. 
