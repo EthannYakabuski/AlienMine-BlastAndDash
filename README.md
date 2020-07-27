@@ -23,15 +23,15 @@ GAMEPLAY:
 Spawn in with limited supplies, and under the immediate threat of alien attack. Quickly mine some materials to upgrade your weapons and get some armor. Last as long as you can so you can travel to different biomes, meeting different enemy types, getting different upgrades and encountering epic boss fights along the way that will make you want to smash your keyboard. 
 
 CONTROLS: 
-Move with WASD
+Move with WASD. Holding down keys incur an immediate slight time delay, but is substantially faster for traveling across the map quickly
 
 TOOLBAR:
 Use hotkeys 1,2,3,4,5 to access your toolbar
-1: Gun: click as fast as you can to shoot a single bullet at a time over any distance, OR click and hold while spraying your mouse back and forth to unleash a heavy barrage of bullets
+1: Gun: Click and hold while dragging your mouse back and forth to unleash a heavy barrage of bullets
 2: Shotgun: click once every 2 seconds to shoot a large spread of powerful shots over a short distance
-3: Pickaxe: click and hold on any mineable material that you are within pickaxe range. 4 clicks or hold click for 0.133 seconds on any resource block and the corresponding resource will be added to your inventory.
-4: SuperPower: Timed cooldown, sends a large number of powerful projectiles all around you. Can be upgraded starting in the second biome. 
-5: Potion: Timed cooldown, but provides a quick boost to your health bar, hit this hotkey and you will automatically drink a potion. Can be upgraded starting in the second biome. 
+3: Pickaxe: click and hold on any mineable material that you are within pickaxe range. Hold click for 0.133 seconds on any resource block and the corresponding resource will be added to your inventory.
+4: SuperPower: Timed cooldown, sends a large number of powerful projectiles all around you. Obtained in the fisrt biome and can be upgraded starting in the second biome. 
+5: Potion: Timed cooldown, but provides a quick boost to your health bar, hit this hotkey and you will automatically drink a potion. Obtained in the first biome and can be upgraded starting in the second biome. 
 
 HOTKEYS:
 
