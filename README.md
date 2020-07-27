@@ -1,5 +1,5 @@
 # Alien Mine: Blast & Dash
-2D miner/shooter and builder programmed in processing. 
+2D FAST-PACED ACTION MOB SHOOTER/MINER
 
 Travel through 3 biomes encountering 10+ enemies that impose unique challenges. Upgrade your weapons, abilities and armor. Can you survive the onslaught?
 
