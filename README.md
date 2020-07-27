@@ -2,6 +2,8 @@
 2D miner/shooter and builder programmed in processing. 
 
 Travel through 3 biomes encountering 10+ enemies that impose unique challenges. Upgrade your weapons, abilities and armor. Can you survive the onslaught?
+
+
 HOW TO INSTALL STANDALONE GAME (Pre-ALPHA VERSION V0.091): 
 1. Download AlienMineV0.091.zip
 2. Extract
